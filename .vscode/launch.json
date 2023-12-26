@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiceProviderApp<service-provider>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ServiceProviderApp",
+            "projectName": "service-provider",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

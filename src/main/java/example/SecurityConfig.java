@@ -3,47 +3,37 @@ package example;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistration;
-import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository;
 import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrations;
-import org.springframework.security.saml2.provider.service.web.Saml2MetadataFilter;
 import org.springframework.security.saml2.provider.service.registration.InMemoryRelyingPartyRegistrationRepository;
-import org.springframework.security.saml2.provider.service.servlet.filter.Saml2WebSsoAuthenticationFilter;
-import org.springframework.security.saml2.provider.service.web.DefaultRelyingPartyRegistrationResolver;
-// Other imports
-
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class SecurityConfig {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .saml2Login()
-            .and()
-            .addFilterBefore(saml2MetadataFilter(), Saml2WebSsoAuthenticationFilter.class)
-            .authorizeRequests()
-            .antMatchers("/**").authenticated();
+                .saml2Login()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/**").authenticated();
+
+        return http.build();
     }
 
     @Bean
-    public RelyingPartyRegistrationRepository relyingPartyRegistrationRepository() {
+    public InMemoryRelyingPartyRegistrationRepository relyingPartyRegistrationRepository() {
         RelyingPartyRegistration registration = RelyingPartyRegistrations
-            .fromMetadataLocation("https://ssologin.cuny.edu/idp/metadata/oam-saml-metadata.xml")
-            .registrationId("samlexample")
-            .entityId("test-service-provider") // "http://172.27.9.4:8080/sp/login/saml2/sso/samlexample"
-            .assertionConsumerServiceUrlTemplate("https://172.27.9.4:8080/sp/login/saml2/sso/{registrationId}")
-            .build();
+                .fromMetadataLocation("https://ssologin.cuny.edu/idp/metadata/oam-saml-metadata.xml")
+                .registrationId("samlexample")
+                .entityId("test-service-provider")
+                .assertionConsumerServiceLocation("http://172.27.9.4:8080/sp/login/saml2/sso/samlexample")
+                .build();
 
         return new InMemoryRelyingPartyRegistrationRepository(registration);
     }
 
-    @Bean
-    public Saml2MetadataFilter saml2MetadataFilter() {
-    return new org.springframework.security.saml2.provider.service.web.Saml2MetadataFilter(
-            new DefaultRelyingPartyRegistrationResolver(relyingPartyRegistrationRepository()),
-            null  // No need to explicitly provide a metadata resolver
-    	);
-    }
 }
