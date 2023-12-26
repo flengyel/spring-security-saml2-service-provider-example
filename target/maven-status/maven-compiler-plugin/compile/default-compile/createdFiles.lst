@@ -1,3 +1,4 @@
 example\AppController.class
 example\ServiceProviderApp.class
 example\SecurityConfig.class
+example\MetadataController.class

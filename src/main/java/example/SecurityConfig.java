@@ -19,7 +19,8 @@ public class SecurityConfig {
                 .saml2Login()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").authenticated();
+                .antMatchers("/sp/test", "/sp/saml/metadata").permitAll() // Allow unauthenticated access
+                .anyRequest().authenticated(); // Secure all other requests
 
         return http.build();
     }
