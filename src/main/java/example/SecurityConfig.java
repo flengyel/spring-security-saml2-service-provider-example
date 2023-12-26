@@ -44,7 +44,9 @@ public class SecurityConfig {
                 .signingX509Credentials(c -> c.add(signingCredential))
                 .singleLogoutServiceLocation("http://localhost:8080/logout") // Your SP logout URL
                 .singleLogoutServiceResponseLocation("http://localhost:8080/logout/response") // Your SP logout response
-                                                                                              // URL
+                .nameIdFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress") // Request emailAddress as
+                                                                                        // nameID format
+                // NameID
                 .assertingPartyDetails(partyDetails -> partyDetails
                         .entityId("https://ssoyellow.cuny.edu/oam/fed")
                         .singleSignOnServiceLocation("https://ssoyellow.cuny.edu/oamfed/idp/samlv20")
