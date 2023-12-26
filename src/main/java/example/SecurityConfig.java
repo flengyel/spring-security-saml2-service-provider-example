@@ -42,8 +42,9 @@ public class SecurityConfig {
                 .entityId("test-service-provider")
                 .assertionConsumerServiceLocation("http://172.27.9.4:8080/sp/login/saml2/sso/samlexample")
                 .signingX509Credentials(c -> c.add(signingCredential))
-                .singleLogoutServiceLocation("http://localhost:8080/logout") // Your SP logout URL
-                .singleLogoutServiceResponseLocation("http://localhost:8080/logout/response") // Your SP logout response
+                .singleLogoutServiceLocation("http://172.27.9.4:8080/logout") // Your SP logout URL
+                .singleLogoutServiceResponseLocation("http://172.27.9.4:8080/logout/response") // Your SP logout
+                                                                                               // response
                 .nameIdFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress") // Request emailAddress as
                                                                                         // nameID format
                 // NameID
